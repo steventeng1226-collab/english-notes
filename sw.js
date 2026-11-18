@@ -1,4 +1,4 @@
-const CACHE = 'enc-v1.1.0';
+const CACHE = 'enc-v1.2.0';
 const ASSETS = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 
 self.addEventListener('install', e => {
