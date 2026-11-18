@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#121212">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<title>英文筆記卡</title>
+<style>
+:root{--bg:#121212;--card:#1f1f1f;--card2:#2a2a2a;--tx:#f5f5f5;--sub:#dcdcdc;--line:#3a3a3a;--acc:#ffb300;--movie:#ff8a65;--life:#81c784;--work:#64b5f6;--warn:#ffd54f;--err:#ef5350}
+html{font-size:19px}
+html.f-std{font-size:17px}html.f-big{font-size:19px}html.f-xl{font-size:22px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Noto Sans TC","Microsoft JhengHei",sans-serif;line-height:1.55;padding-bottom:5.5rem}
+button,.chip,.tcard,nav button,.ex,.flip{user-select:none;-webkit-user-select:none;cursor:pointer}
+button{font:inherit;color:var(--tx);background:var(--card2);border:1px solid var(--line);border-radius:.6rem;padding:.45rem .8rem}
+button.pri{background:var(--acc);color:#111;border-color:var(--acc);font-weight:700}
+button.danger{border-color:var(--err);color:#ff8a80}
+input,textarea,select{font:inherit;color:var(--tx);background:#181818;border:1px solid #555;border-radius:.6rem;padding:.6rem .7rem;width:100%}
+textarea{min-height:12rem;resize:vertical;font-size:.9rem}
+header{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:.7rem 1rem;background:#0d0d0d;border-bottom:1px solid var(--line)}
+.ttl{font-weight:800;font-size:1.15rem;color:var(--acc)}
+.ver{font-size:.75rem;color:var(--sub);font-weight:400;margin-left:.3rem}
+.sync{font-size:.85rem;padding:.3rem .7rem}
+.sync.ok{border-color:#66bb6a;color:#a5d6a7}.sync.err{border-color:var(--err);color:#ff8a80}.sync.busy{border-color:var(--acc);color:var(--acc)}
+main{padding:.8rem 1rem}
+.hidden{display:none!important}
+.chips{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.7rem}
+.chip{padding:.35rem .9rem;border-radius:2rem;border:1px solid #555;background:var(--card);font-size:.95rem}
+.chip.on{background:var(--acc);color:#111;border-color:var(--acc);font-weight:700}
+.tcard{background:var(--card);border:1px solid var(--line);border-radius:.9rem;padding:.8rem 1rem;margin:.6rem 0}
+.tname{font-size:1.1rem;font-weight:700;margin-top:.2rem}
+.tmeta{font-size:.85rem;color:var(--sub)}
+.cat{display:inline-block;font-size:.8rem;font-weight:700;padding:.05rem .55rem;border-radius:.4rem;color:#111}
+.c-電影{background:var(--movie)}.c-生活{background:var(--life)}.c-工作{background:var(--work)}
+.item{background:var(--card);border:1px solid var(--line);border-radius:.9rem;padding:.9rem 1rem;margin:.7rem 0}
+.item.arch{opacity:.55}
+.en{font-size:1.15rem;font-weight:700;color:#fff}
+.zh{color:var(--sub);margin-top:.15rem}
+.snd{margin-top:.45rem;color:#ffe082;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.92rem;word-break:break-word}
+.tip{margin-top:.35rem}
+.ex{margin-top:.4rem;padding:.4rem .6rem;background:var(--card2);border-radius:.5rem}
+.ex b{color:var(--acc);margin-right:.3rem}
+.exzh{display:block;color:var(--sub);font-size:.9rem}
+.acts{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.7rem}
+.acts button{font-size:.85rem;padding:.3rem .6rem}
+.warnbox{border-color:var(--warn);color:#fff3c4}
+table{border-collapse:collapse;width:100%;margin-top:.5rem;font-size:.92rem}
+th,td{border:1px solid #555;padding:.4rem .5rem;text-align:left;vertical-align:top}
+th{background:var(--card2);color:var(--acc)}
+.ttlrow{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+.h2{font-size:1.25rem;font-weight:800}
+.empty{color:var(--sub);text-align:center;padding:2rem 1rem}
+.row{display:flex;gap:.5rem;flex-wrap:wrap;margin:.6rem 0}
+.lbl{display:block;margin:.9rem 0 .3rem;font-weight:700}
+.hint{font-size:.85rem;color:var(--sub);margin-top:.3rem}
+.pg{border:1px solid var(--line);border-radius:.9rem;margin:.8rem 0;overflow:hidden}
+.pgh{display:flex;align-items:center;gap:.6rem;padding:.6rem .8rem;background:var(--card2);font-weight:700}
+.pe{padding:.6rem .8rem;border-top:1px solid var(--line)}
+.pe label,.pgh label{display:flex;gap:.6rem;align-items:flex-start}
+.pe input[type=checkbox],.pgh input[type=checkbox]{width:1.35rem;height:1.35rem;flex:none;margin-top:.15rem;accent-color:var(--acc)}
+.pex{margin:.35rem 0 0 1.9rem}
+.flip{background:var(--card);border:2px solid var(--line);border-radius:1rem;padding:1.4rem 1.1rem;min-height:14rem;margin-top:.6rem}
+.flip .q{font-size:1.35rem;font-weight:700}
+.flip .tag{font-size:.85rem;color:var(--sub);margin-bottom:.6rem}
+.flip .hint2{color:var(--sub);margin-top:1.2rem;font-size:.9rem}
+.ans{margin-top:1rem;padding-top:1rem;border-top:1px dashed #555}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:#0d0d0d;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;border:0;border-radius:0;background:none;padding:.7rem 0 .8rem;font-size:.9rem;color:#cfcfcf}
+nav button span{display:block;font-size:1.3rem}
+nav button.on{color:var(--acc);font-weight:700}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:20;display:flex;align-items:flex-end;justify-content:center}
+.mbox{background:#1b1b1b;border:1px solid var(--line);border-radius:1rem 1rem 0 0;width:100%;max-width:40rem;max-height:90vh;overflow:auto;padding:1rem}
+#toast{position:fixed;left:50%;bottom:6rem;transform:translateX(-50%);background:#333;color:#fff;padding:.6rem 1rem;border-radius:.6rem;font-size:.95rem;opacity:0;transition:opacity .2s;pointer-events:none;z-index:30;max-width:90vw}
+#toast.on{opacity:1}
+</style>
+</head>
+<body>
+<header>
+  <div class="ttl">英文筆記卡<span class="ver" id="ver"></span></div>
+  <button id="syncBtn" class="sync">⟳ <span id="syncTxt">本機</span></button>
+</header>
+<main>
+  <section id="v-notes" class="view">
+    <div class="chips" id="catChips"></div>
+    <input id="q" type="search" placeholder="🔍 搜尋英文、中文、主題…">
+    <div id="tlist"></div>
+  </section>
+  <section id="v-topic" class="view hidden"></section>
+  <section id="v-review" class="view hidden"></section>
+  <section id="v-import" class="view hidden">
+    <div class="h2">匯入筆記</div>
+    <div class="hint">把 Claude「英文筆記卡」整理好的區塊整段複製，貼在下面，按「解析」。</div>
+    <div class="row"><button id="pasteBtn">📋 從剪貼簿貼上</button><button id="clearBtn">清除</button></div>
+    <textarea id="imp" placeholder="#主題 電影｜The Intern&#10;- There's been a ton of research on this.｜這件事已經有很多研究了。&#10;  🔊 thərz BI-nə TUH-nə REE-sər-chɑn THIS&#10;  💡 a ton of 吞 v"></textarea>
+    <div class="row"><button class="pri" id="parseBtn">解析</button></div>
+    <div id="prev"></div>
+  </section>
+  <section id="v-set" class="view hidden"></section>
+</main>
+<nav>
+  <button data-v="notes"><span>📚</span>筆記</button>
+  <button data-v="review"><span>🃏</span>複習</button>
+  <button data-v="import"><span>➕</span>匯入</button>
+  <button data-v="set"><span>⚙️</span>設定</button>
+</nav>
+<div id="modal" class="modal hidden"><div class="mbox" id="mbox"></div></div>
+<div id="toast"></div>
+<input type="file" id="fileIn" accept="application/json" class="hidden">
+<script>
+const VER = '1.0.0';
+const CATS = ['電影', '生活', '工作'];
+const LS = { items: 'enc:items', del: 'enc:del', cfg: 'enc:cfg' };
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+function load(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
+function save(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { toast('儲存失敗：' + e.message); } }
+let items = load(LS.items, []);
+let delQ = load(LS.del, []);
+let cfg = Object.assign({ url: '', token: '', rate: 0.8, font: 'big', showArch: false, lastSync: '' }, load(LS.cfg, {}));
+function persist() { save(LS.items, items); save(LS.del, delQ); }
+function saveCfg() { save(LS.cfg, cfg); }
+const pad = n => String(n).padStart(2, '0');
+function nowStr() { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`; }
+function newId() { return 'n' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+const norm = s => String(s || '').toLowerCase().replace(/[’‘]/g, "'").replace(/[^a-z0-9']/g, '');
+const uniq = a => [...new Set(a.filter(Boolean))];
+let toastT;
+function toast(t) { const e = $('#toast'); e.textContent = t; e.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => e.classList.remove('on'), 2600); }
+
+/* ---------- 解析 ---------- */
+const SEP = /\s*[｜|]\s*/;
+function splitPair(s) { const p = s.split(SEP); return { en: (p[0] || '').trim(), zh: p.slice(1).join('｜').trim() }; }
+function parse(text) {
+  const out = []; let topic = { cat: '生活', name: '未分類' }; let cur = null, tbl = null;
+  for (const raw of text.replace(/\r/g, '').split('\n')) {
+    const l = raw.trim();
+    if (!l || l.startsWith('```')) continue;
+    let m;
+    if ((m = l.match(/^#\s*主題\s*(.*)$/))) {
+      const p = m[1].split(SEP); let cat = (p[0] || '').trim(); let name = p.slice(1).join('｜').trim();
+      if (!CATS.includes(cat)) { name = m[1].trim(); cat = '生活'; }
+      topic = { cat, name: name || '未命名' }; cur = null; tbl = null; continue;
+    }
+    if ((m = l.match(/^#\s*對照\s*(.*)$/))) {
+      tbl = { type: '對照', cat: topic.cat, topic: topic.name, en: m[1].trim() || '對照表', table: [] };
+      out.push(tbl); cur = null; continue;
+    }
+    if (/^[|｜]/.test(l)) {
+      if (tbl) {
+        const cells = l.replace(/^[|｜]/, '').replace(/[|｜]$/, '').split(/[|｜]/).map(s => s.trim());
+        if (!cells.every(c => c === '' || /^:?-{2,}:?$/.test(c))) tbl.table.push(cells);
+      }
+      continue;
+    }
+    if (/^⚠/.test(l)) {
+      const w = l.replace(/^⚠️?\s*/, '').replace(/^待查\s*[:：]\s*/, '');
+      if (w) out.push({ type: '待查', cat: topic.cat, topic: topic.name, warn: w });
+      continue;
+    }
+    if (/^[-•]\s+/.test(l)) {
+      const { en, zh } = splitPair(l.replace(/^[-•]\s+/, ''));
+      if (!en) continue;
+      cur = { type: '句', cat: topic.cat, topic: topic.name, en, zh, sound: '', tips: [], ex: [] };
+      out.push(cur); tbl = null; continue;
+    }
+    if (/^(🔊|🔈|🔉)/u.test(l)) { if (cur) cur.sound = l.replace(/^(🔊|🔈|🔉)️?\s*/u, ''); continue; }
+    if (/^💡/u.test(l)) { if (cur) cur.tips.push(l.replace(/^💡️?\s*/u, '')); continue; }
+    if (/^例[\s:：]/.test(l)) { if (cur) { const p = splitPair(l.replace(/^例[:：]?\s*/, '')); if (p.en) cur.ex.push(p); } continue; }
+    if (cur) cur.tips.push(l);
+  }
+  return out;
+}
+
+/* ---------- 主題 ---------- */
+function topics(includeArch) {
+  const m = new Map();
+  for (const it of items) {
+    if (it.arch && !(includeArch ?? cfg.showArch)) continue;
+    const k = it.cat + '｜' + it.topic;
+    if (!m.has(k)) m.set(k, { key: k, cat: it.cat, name: it.topic, list: [], last: '' });
+    const t = m.get(k); t.list.push(it); if ((it.updated || '') > t.last) t.last = it.updated || '';
+  }
+  return [...m.values()].sort((a, b) => b.last.localeCompare(a.last));
+}
+function itemText(i) { return [i.en, i.zh, i.sound, (i.tips || []).join(' '), (i.ex || []).map(e => e.en + ' ' + e.zh).join(' '), (i.table || []).flat().join(' '), i.warn].join(' '); }
+
+/* ---------- 畫面切換 ---------- */
+let view = 'notes';
+function show(v, push) {
+  document.querySelectorAll('.view').forEach(e => e.classList.add('hidden'));
+  $('#v-' + v).classList.remove('hidden');
+  document.querySelectorAll('nav button').forEach(b => b.classList.toggle('on', b.dataset.v === (v === 'topic' ? 'notes' : v)));
+  view = v; window.scrollTo(0, 0);
+  if (push) history.pushState({ v }, '');
+  if (v === 'notes') renderNotes();
+  if (v === 'review') { buildPool(); renderReview(); }
+  if (v === 'set') renderSet();
+}
+window.addEventListener('popstate', () => { if (!$('#modal').classList.contains('hidden')) { closeModal(); return; } if (view !== 'notes') show('notes'); });
+document.querySelectorAll('nav button').forEach(b => b.onclick = () => show(b.dataset.v, b.dataset.v !== 'notes'));
+function rerender() { if (view === 'notes') renderNotes(); else if (view === 'topic') renderTopic(); else if (view === 'set') renderSet(); }
+
+/* ---------- 筆記列表 ---------- */
+let fCat = '全部';
+function renderNotes() {
+  $('#catChips').innerHTML = ['全部', ...CATS, '⭐'].map(c => `<button class="chip ${fCat === c ? 'on' : ''}" data-cat="${c}">${c}</button>`).join('');
+  let ts = topics();
+  if (fCat === '⭐') ts = ts.filter(t => t.list.some(i => i.star));
+  else if (fCat !== '全部') ts = ts.filter(t => t.cat === fCat);
+  const q = $('#q').value.trim().toLowerCase();
+  if (q) ts = ts.filter(t => (t.name + ' ' + t.list.map(itemText).join(' ')).toLowerCase().includes(q));
+  if (!items.length) { $('#tlist').innerHTML = `<div class="empty">還沒有筆記。<br>到「➕ 匯入」貼上整理好的區塊。</div>`; return; }
+  if (!ts.length) { $('#tlist').innerHTML = `<div class="empty">沒有符合的筆記</div>`; return; }
+  $('#tlist').innerHTML = ts.map(t => {
+    const n = t.list.filter(i => i.type === '句').length, c = t.list.filter(i => i.type === '對照').length, w = t.list.filter(i => i.type === '待查').length;
+    const meta = [n ? n + ' 句' : '', c ? c + ' 對照' : '', w ? '⚠️ ' + w : ''].filter(Boolean).join(' · ');
+    return `<div class="tcard" data-key="${esc(t.key)}"><span class="cat c-${t.cat}">${t.cat}</span><div class="tname">${esc(t.name)}</div><div class="tmeta">${meta}　${esc((t.last || '').slice(0, 10))}</div></div>`;
+  }).join('');
+}
+$('#catChips').onclick = e => { const b = e.target.closest('.chip'); if (b) { fCat = b.dataset.cat; renderNotes(); } };
+$('#q').oninput = renderNotes;
+$('#tlist').onclick = e => { const c = e.target.closest('.tcard'); if (c) { curKey = c.dataset.key; show('topic', true); renderTopic(); } };
+
+/* ---------- 主題內容 ---------- */
+let curKey = null;
+const ORDER = { '句': 0, '對照': 1, '待查': 2 };
+function renderTopic() {
+  const t = topics(true).find(t => t.key === curKey);
+  if (!t) { show('notes'); return; }
+  const list = t.list.filter(i => cfg.showArch || !i.arch).sort((a, b) => ORDER[a.type] - ORDER[b.type] || (a.created || '').localeCompare(b.created || ''));
+  $('#v-topic').innerHTML = `
+    <div class="row"><button id="backBtn">← 返回</button><button id="renBtn">✏️ 主題／分類</button></div>
+    <div class="ttlrow"><span class="cat c-${t.cat}">${t.cat}</span><span class="h2">${esc(t.name)}</span></div>
+    ${list.map(renderItem).join('') || '<div class="empty">此主題的項目都已封存</div>'}`;
+}
+function renderItem(i) {
+  const acts = `<div class="acts">${i.type === '句' ? `<button data-act="say">🔈 朗讀</button><button data-act="star">${i.star ? '★ 已標記' : '☆ 標記'}</button>` : ''}${i.type !== '待查' ? `<button data-act="edit">✏️ 編輯</button><button data-act="arch">${i.arch ? '取消封存' : '封存'}</button>` : ''}<button data-act="del" class="danger">${i.type === '待查' ? '✓ 已解決，刪除' : '🗑 刪除'}</button></div>`;
+  if (i.type === '句') return `<div class="item ${i.arch ? 'arch' : ''}" data-id="${i.id}">
+    <div class="en">${esc(i.en)}</div>${i.zh ? `<div class="zh">${esc(i.zh)}</div>` : ''}
+    ${i.sound ? `<div class="snd">🔊 ${esc(i.sound)}</div>` : ''}
+    ${(i.tips || []).map(x => `<div class="tip">💡 ${esc(x)}</div>`).join('')}
+    ${(i.ex || []).map(x => `<div class="ex" data-say="${esc(x.en)}"><b>例</b>${esc(x.en)} 🔈${x.zh ? `<span class="exzh">${esc(x.zh)}</span>` : ''}</div>`).join('')}
+    ${acts}</div>`;
+  if (i.type === '對照') {
+    const [h, ...rows] = i.table || [];
+    return `<div class="item ${i.arch ? 'arch' : ''}" data-id="${i.id}"><div class="en">🔀 ${esc(i.en)}</div>
+      <table>${h ? `<tr>${h.map(c => `<th>${esc(c)}</th>`).join('')}</tr>` : ''}${rows.map(r => `<tr>${r.map(c => `<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</table>${acts}</div>`;
+  }
+  return `<div class="item warnbox" data-id="${i.id}">⚠️ 待查：${esc(i.warn)}${acts}</div>`;
+}
+$('#v-topic').onclick = e => {
+  if (e.target.closest('#backBtn')) { history.back(); return; }
+  if (e.target.closest('#renBtn')) { renameTopic(); return; }
+  const ex = e.target.closest('.ex'); if (ex) { say(ex.dataset.say); return; }
+  const b = e.target.closest('[data-act]'); if (!b) return;
+  const it = items.find(x => x.id === b.closest('.item').dataset.id); if (!it) return;
+  const act = b.dataset.act;
+  if (act === 'say') return say(it.en);
+  if (act === 'edit') return editItem(it);
+  if (act === 'del') {
+    if (!confirm(it.type === '待查' ? '確定已解決並刪除這筆待查？' : '確定刪除？（試算表也會一起刪除）')) return;
+    items = items.filter(x => x !== it); delQ.push(it.id);
+  } else if (act === 'star') it.star = !it.star;
+  else if (act === 'arch') it.arch = !it.arch;
+  touch(it); commitChange();
+};
+function touch(it) { it.updated = nowStr(); it.dirty = true; }
+function commitChange() { persist(); rerender(); schedSync(); }
+
+/* ---------- 朗讀 ---------- */
+function say(t) {
+  if (!('speechSynthesis' in window)) return toast('此裝置不支援朗讀');
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = +cfg.rate || 0.8;
+  const v = speechSynthesis.getVoices().find(v => /en[-_]US/i.test(v.lang)); if (v) u.voice = v;
+  speechSynthesis.speak(u);
+}
+if ('speechSynthesis' in window) speechSynthesis.getVoices();
+
+/* ---------- Modal ---------- */
+function openModal(html) { $('#mbox').innerHTML = html; $('#modal').classList.remove('hidden'); history.pushState({ m: 1 }, ''); }
+function closeModal() { $('#modal').classList.add('hidden'); }
+function closeModalBack() { if (!$('#modal').classList.contains('hidden')) history.back(); }
+$('#modal').onclick = e => { if (e.target.id === 'modal') closeModalBack(); };
+
+function editItem(it) {
+  const isS = it.type === '句';
+  openModal(`<div class="h2">編輯</div>
+    <label class="lbl">${isS ? '英文' : '標題'}</label><input id="e_en" value="${esc(it.en)}">
+    ${isS ? `<label class="lbl">中文</label><input id="e_zh" value="${esc(it.zh)}">
+    <label class="lbl">🔊 連讀</label><input id="e_snd" value="${esc(it.sound)}">
+    <label class="lbl">💡 重點（一行一個）</label><textarea id="e_tips" style="min-height:6rem">${esc((it.tips || []).join('\n'))}</textarea>
+    <label class="lbl">例句（一行一句，英文｜中文）</label><textarea id="e_ex" style="min-height:6rem">${esc((it.ex || []).map(x => x.en + (x.zh ? '｜' + x.zh : '')).join('\n'))}</textarea>`
+    : `<label class="lbl">表格（一行一列，用｜分隔，第一行是標題）</label><textarea id="e_tb">${esc((it.table || []).map(r => r.join('｜')).join('\n'))}</textarea>`}
+    <div class="row"><button class="pri" id="e_ok">儲存</button><button id="e_no">取消</button></div>`);
+  $('#e_no').onclick = closeModalBack;
+  $('#e_ok').onclick = () => {
+    const lines = id => $(id).value.split('\n').map(s => s.trim()).filter(Boolean);
+    it.en = $('#e_en').value.trim();
+    if (isS) { it.zh = $('#e_zh').value.trim(); it.sound = $('#e_snd').value.trim(); it.tips = lines('#e_tips'); it.ex = lines('#e_ex').map(splitPair); }
+    else it.table = lines('#e_tb').map(l => l.split(/[|｜]/).map(c => c.trim()));
+    touch(it); closeModalBack(); commitChange(); toast('已儲存');
+  };
+}
+function renameTopic() {
+  const t = topics(true).find(t => t.key === curKey); if (!t) return;
+  openModal(`<div class="h2">主題／分類</div>
+    <label class="lbl">分類</label><select id="r_cat">${CATS.map(c => `<option ${c === t.cat ? 'selected' : ''}>${c}</option>`).join('')}</select>
+    <label class="lbl">主題名稱</label><input id="r_name" value="${esc(t.name)}">
+    <div class="hint">改成已存在的主題名稱，會自動合併到那個主題。</div>
+    <div class="row"><button class="pri" id="r_ok">儲存</button><button id="r_no">取消</button></div>`);
+  $('#r_no').onclick = closeModalBack;
+  $('#r_ok').onclick = () => {
+    const cat = $('#r_cat').value, name = $('#r_name').value.trim() || t.name;
+    items.forEach(i => { if (i.cat === t.cat && i.topic === t.name) { i.cat = cat; i.topic = name; touch(i); } });
+    curKey = cat + '｜' + name; closeModalBack(); commitChange(); toast('已更新');
+  };
+}
+
+/* ---------- 匯入 ---------- */
+let parsed = [];
+$('#pasteBtn').onclick = async () => {
+  try { const t = await navigator.clipboard.readText(); if (!t) return toast('剪貼簿是空的'); $('#imp').value = t; doParse(); }
+  catch (e) { toast('無法讀取剪貼簿，請長按輸入框手動貼上'); }
+};
+$('#clearBtn').onclick = () => { $('#imp').value = ''; parsed = []; $('#prev').innerHTML = ''; };
+$('#parseBtn').onclick = doParse;
+function doParse() {
+  parsed = parse($('#imp').value);
+  parsed.forEach(p => { p.on = true; (p.ex || []).forEach(x => x.on = true); });
+  if (!parsed.length) { $('#prev').innerHTML = ''; return toast('找不到可匯入的內容：需要 #主題 和 - 開頭的句子'); }
+  renderPrev();
+}
+function renderPrev() {
+  const groups = [];
+  parsed.forEach((p, i) => { const k = p.cat + '｜' + p.topic; let g = groups.find(g => g.k === k); if (!g) groups.push(g = { k, cat: p.cat, name: p.topic, idx: [] }); g.idx.push(i); });
+  const cnt = parsed.filter(p => p.on).length;
+  $('#prev').innerHTML = `<div class="hint">勾選要加入的項目（預設全選）。同主題、同句子會自動合併，不會重複。</div>` + groups.map((g, gi) => {
+    const exists = items.some(i => i.cat === g.cat && i.topic === g.name);
+    return `<div class="pg"><div class="pgh"><label><input type="checkbox" data-g="${gi}" ${g.idx.every(i => parsed[i].on) ? 'checked' : ''}><span><span class="cat c-${g.cat}">${g.cat}</span> ${esc(g.name)}${exists ? '　<span class="tmeta">（加入既有主題）</span>' : ''}</span></label></div>` +
+      g.idx.map(i => prevEntry(parsed[i], i)).join('') + '</div>';
+  }).join('') + `<div class="row"><button class="pri" id="commitBtn">加入勾選的 ${cnt} 項</button></div>`;
+  $('#prev').dataset.groups = JSON.stringify(groups.map(g => g.idx));
+}
+function prevEntry(p, i) {
+  let body;
+  if (p.type === '句') body = `<div class="en">${esc(p.en)}</div>${p.zh ? `<div class="zh">${esc(p.zh)}</div>` : ''}${p.sound ? `<div class="snd">🔊 ${esc(p.sound)}</div>` : ''}${p.tips.map(x => `<div class="tip">💡 ${esc(x)}</div>`).join('')}`;
+  else if (p.type === '對照') body = `<div class="en">🔀 ${esc(p.en)}</div><div class="tmeta">${p.table.length ? p.table.length - 1 : 0} 列對照表</div>`;
+  else body = `<div>⚠️ 待查：${esc(p.warn)}</div>`;
+  const exs = p.type === '句' ? p.ex.map((x, ei) => `<div class="pex"><label><input type="checkbox" data-p="${i}" data-e="${ei}" ${x.on ? 'checked' : ''} ${p.on ? '' : 'disabled'}><span>例 ${esc(x.en)}${x.zh ? `<span class="exzh">${esc(x.zh)}</span>` : ''}</span></label></div>`).join('') : '';
+  return `<div class="pe"><label><input type="checkbox" data-p="${i}" ${p.on ? 'checked' : ''}><span>${body}</span></label>${exs}</div>`;
+}
+$('#prev').onchange = e => {
+  const c = e.target; if (c.type !== 'checkbox') return;
+  if (c.dataset.g != null) { JSON.parse($('#prev').dataset.groups)[c.dataset.g].forEach(i => parsed[i].on = c.checked); }
+  else if (c.dataset.e != null) parsed[c.dataset.p].ex[c.dataset.e].on = c.checked;
+  else parsed[c.dataset.p].on = c.checked;
+  const y = window.scrollY; renderPrev(); window.scrollTo(0, y);
+};
+$('#prev').onclick = e => { if (e.target.id === 'commitBtn') commitImport(); };
+function mergeEntry(e) {
+  const ts = nowStr();
+  const base = { id: newId(), cat: e.cat, topic: e.topic, en: '', zh: '', sound: '', tips: [], ex: [], table: [], warn: '', star: false, arch: false, created: ts, updated: ts, dirty: true };
+  const same = i => i.type === e.type && i.cat === e.cat && i.topic === e.topic;
+  if (e.type === '句') {
+    const ex = e.ex.filter(x => x.on !== false).map(({ en, zh }) => ({ en, zh }));
+    const old = items.find(i => same(i) && norm(i.en) === norm(e.en));
+    if (old) {
+      if (e.zh) old.zh = e.zh; if (e.sound) old.sound = e.sound;
+      old.tips = uniq([...(old.tips || []), ...e.tips]);
+      const have = new Set((old.ex || []).map(x => norm(x.en))); old.ex = old.ex || [];
+      ex.forEach(x => { if (!have.has(norm(x.en))) old.ex.push(x); });
+      old.arch = false; touch(old); return 'upd';
+    }
+    items.push({ ...base, type: '句', en: e.en, zh: e.zh, sound: e.sound, tips: e.tips, ex }); return 'new';
+  }
+  if (e.type === '對照') {
+    const old = items.find(i => same(i) && norm(i.en) === norm(e.en));
+    if (old) { old.table = e.table; old.arch = false; touch(old); return 'upd'; }
+    items.push({ ...base, type: '對照', en: e.en, table: e.table }); return 'new';
+  }
+  if (items.some(i => same(i) && i.warn === e.warn)) return 'dup';
+  items.push({ ...base, type: '待查', warn: e.warn }); return 'new';
+}
+function commitImport() {
+  const sel = parsed.filter(p => p.on); if (!sel.length) return toast('沒有勾選任何項目');
+  const r = { new: 0, upd: 0, dup: 0 };
+  sel.forEach(p => r[mergeEntry(p)]++);
+  persist(); schedSync();
+  toast(`新增 ${r.new} 項、更新 ${r.upd} 項` + (r.dup ? `、略過重複 ${r.dup} 項` : ''));
+  curKey = sel[0].cat + '｜' + sel[0].topic;
+  $('#imp').value = ''; parsed = []; $('#prev').innerHTML = '';
+  show('topic', true); renderTopic();
+}
+
+/* ---------- 複習 ---------- */
+const rv = { pool: [], i: 0, open: false, cat: '全部', star: false, dir: 'zh' };
+function buildPool() {
+  let p = items.filter(i => i.type === '句' && !i.arch);
+  if (rv.cat !== '全部') p = p.filter(i => i.cat === rv.cat);
+  if (rv.star) p = p.filter(i => i.star);
+  for (let i = p.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [p[i], p[j]] = [p[j], p[i]]; }
+  rv.pool = p; rv.i = 0; rv.open = false;
+}
+function renderReview() {
+  const it = rv.pool[rv.i];
+  const ctl = `<div class="chips">${['全部', ...CATS].map(c => `<button class="chip ${rv.cat === c ? 'on' : ''}" data-rc="${c}">${c}</button>`).join('')}<button class="chip ${rv.star ? 'on' : ''}" data-rs="1">⭐ 只看標記</button></div>
+    <div class="chips"><button class="chip ${rv.dir === 'zh' ? 'on' : ''}" data-rd="zh">看中文 → 說英文</button><button class="chip ${rv.dir === 'en' ? 'on' : ''}" data-rd="en">看英文 → 想中文</button></div>`;
+  if (!it) { $('#v-review').innerHTML = ctl + `<div class="empty">這個範圍沒有句子可以複習</div>`; return; }
+  const noZh = !it.zh;
+  const front = rv.dir === 'zh' && !noZh ? `<div class="q">${esc(it.zh)}</div>` : `<div class="q">${esc(it.en)}</div>`;
+  const back = rv.dir === 'zh' && !noZh
+    ? `<div class="en">${esc(it.en)}</div>${it.sound ? `<div class="snd">🔊 ${esc(it.sound)}</div>` : ''}`
+    : `${it.zh ? `<div class="en">${esc(it.zh)}</div>` : ''}${it.sound ? `<div class="snd">🔊 ${esc(it.sound)}</div>` : ''}`;
+  $('#v-review').innerHTML = ctl + `<div class="flip" id="flip">
+      <div class="tag"><span class="cat c-${it.cat}">${it.cat}</span> ${esc(it.topic)}　${rv.i + 1} / ${rv.pool.length}</div>
+      ${front}
+      ${rv.open ? `<div class="ans">${back}${(it.tips || []).map(x => `<div class="tip">💡 ${esc(x)}</div>`).join('')}${(it.ex || []).map(x => `<div class="ex" data-say="${esc(x.en)}"><b>例</b>${esc(x.en)} 🔈${x.zh ? `<span class="exzh">${esc(x.zh)}</span>` : ''}</div>`).join('')}</div>` : `<div class="hint2">先自己想一想，再點卡片翻開</div>`}
+    </div>
+    <div class="row"><button id="rvSay">🔈 朗讀</button><button id="rvStar">${it.star ? '★ 已標記' : '☆ 標記'}</button><button class="pri" id="rvNext" style="flex:1">${rv.i + 1 < rv.pool.length ? '下一張 →' : '重新洗牌 ↻'}</button></div>`;
+}
+$('#v-review').onclick = e => {
+  const t = e.target;
+  if (t.dataset.rc) { rv.cat = t.dataset.rc; buildPool(); return renderReview(); }
+  if (t.dataset.rs) { rv.star = !rv.star; buildPool(); return renderReview(); }
+  if (t.dataset.rd) { rv.dir = t.dataset.rd; rv.open = false; return renderReview(); }
+  const it = rv.pool[rv.i]; if (!it) return;
+  const ex = t.closest('.ex'); if (ex) return say(ex.dataset.say);
+  if (t.closest('#rvSay')) return say(it.en);
+  if (t.closest('#rvStar')) { it.star = !it.star; touch(it); persist(); schedSync(); return renderReview(); }
+  if (t.closest('#rvNext')) { if (rv.i + 1 < rv.pool.length) { rv.i++; rv.open = false; } else buildPool(); window.scrollTo(0, 0); return renderReview(); }
+  if (t.closest('#flip')) { rv.open = !rv.open; if (rv.open) say(it.en); renderReview(); }
+};
+
+/* ---------- 設定 ---------- */
+function renderSet() {
+  const n = items.filter(i => i.type === '句').length;
+  $('#v-set').innerHTML = `<div class="h2">設定</div>
+    <label class="lbl">Google Apps Script 網址</label><input id="s_url" value="${esc(cfg.url)}" placeholder="https://script.google.com/macros/s/…/exec">
+    <label class="lbl">密碼（與 Code.gs 的 TOKEN 相同）</label><input id="s_tok" value="${esc(cfg.token)}">
+    <div class="row"><button class="pri" id="s_sync">⟳ 立即同步</button></div>
+    <div class="hint">上次同步：${esc(cfg.lastSync || '尚未同步')}　｜　句子 ${n} 句、主題 ${topics(true).length} 個</div>
+    <label class="lbl">朗讀速度</label><div class="chips">${[0.6, 0.8, 1.0].map(r => `<button class="chip ${+cfg.rate === r ? 'on' : ''}" data-rate="${r}">${r}x</button>`).join('')}</div>
+    <label class="lbl">字級</label><div class="chips">${[['std', '標準'], ['big', '大'], ['xl', '特大']].map(([k, l]) => `<button class="chip ${cfg.font === k ? 'on' : ''}" data-font="${k}">${l}</button>`).join('')}</div>
+    <label class="lbl">封存的項目</label><div class="chips"><button class="chip ${cfg.showArch ? 'on' : ''}" id="s_arch">${cfg.showArch ? '顯示中' : '已隱藏'}</button></div>
+    <label class="lbl">備份</label><div class="row"><button id="s_exp">⬇️ 匯出備份 JSON</button><button id="s_imp">⬆️ 從備份還原</button></div>
+    <div class="hint">英文筆記卡 v${VER}</div>`;
+}
+$('#v-set').onclick = e => {
+  const t = e.target;
+  if (t.dataset.rate) { cfg.rate = +t.dataset.rate; saveCfg(); renderSet(); say('Let\'s go for it.'); return; }
+  if (t.dataset.font) { cfg.font = t.dataset.font; saveCfg(); applyFont(); renderSet(); return; }
+  if (t.id === 's_arch') { cfg.showArch = !cfg.showArch; saveCfg(); renderSet(); return; }
+  if (t.id === 's_sync') { sync(true); return; }
+  if (t.id === 's_exp') {
+    const blob = new Blob([JSON.stringify({ app: 'enc', ver: VER, at: nowStr(), items }, null, 1)], { type: 'application/json' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `英文筆記卡備份_${nowStr().slice(0, 10)}.json`; a.click(); return;
+  }
+  if (t.id === 's_imp') { $('#fileIn').click(); return; }
+};
+$('#v-set').onchange = e => {
+  if (e.target.id === 's_url') { cfg.url = e.target.value.trim(); saveCfg(); }
+  if (e.target.id === 's_tok') { cfg.token = e.target.value.trim(); saveCfg(); }
+};
+$('#fileIn').onchange = async e => {
+  const f = e.target.files[0]; if (!f) return;
+  try {
+    const j = JSON.parse(await f.text()); if (!Array.isArray(j.items)) throw new Error('格式不符');
+    if (!confirm(`備份內有 ${j.items.length} 項，要合併到目前資料嗎？（相同 id 以備份為準）`)) return;
+    const m = new Map(items.map(i => [i.id, i])); j.items.forEach(i => { i.dirty = true; m.set(i.id, i); });
+    items = [...m.values()]; commitChange(); toast('已還原');
+  } catch (err) { toast('還原失敗：' + err.message); } finally { e.target.value = ''; }
+};
+function applyFont() { document.documentElement.className = 'f-' + cfg.font; }
+
+/* ---------- 同步 Google Sheets ---------- */
+let syncing = false, syncT = null;
+function schedSync() { clearTimeout(syncT); syncT = setTimeout(sync, 800); }
+function setSync(t, c) { $('#syncTxt').textContent = t; $('#syncBtn').className = 'sync ' + (c || ''); }
+const linesOf = s => String(s || '').split('\n').map(x => x.trim()).filter(Boolean);
+function toRow(i) {
+  return { id: i.id, '分類': i.cat, '主題': i.topic, '類型': i.type, '英文': i.en || '', '中文': i.zh || '', '連讀': i.sound || '',
+    '重點': (i.tips || []).join('\n'), '例句': (i.ex || []).map(e => e.en + (e.zh ? '｜' + e.zh : '')).join('\n'),
+    '對照表': (i.table || []).map(r => r.join('｜')).join('\n'), '待查': i.warn || '', '星號': i.star ? 'Y' : '', '封存': i.arch ? 'Y' : '',
+    '建立日期': i.created || '', '更新時間': i.updated || '' };
+}
+function fromRow(r) {
+  return { id: String(r.id), cat: CATS.includes(r['分類']) ? r['分類'] : '生活', topic: r['主題'] || '未分類', type: ORDER[r['類型']] != null ? r['類型'] : '句',
+    en: r['英文'] || '', zh: r['中文'] || '', sound: r['連讀'] || '', tips: linesOf(r['重點']), ex: linesOf(r['例句']).map(splitPair),
+    table: linesOf(r['對照表']).map(l => l.split('｜').map(c => c.trim())), warn: r['待查'] || '', star: r['星號'] === 'Y', arch: r['封存'] === 'Y',
+    created: r['建立日期'] || '', updated: r['更新時間'] || '', dirty: false };
+}
+async function post(b) {
+  const r = await fetch(cfg.url, { method: 'POST', body: JSON.stringify({ ...b, token: cfg.token }) });
+  const j = await r.json(); if (!j.ok) throw new Error(j.error || '寫入失敗');
+}
+async function sync(manual) {
+  if (!cfg.url) { setSync('本機'); if (manual === true) toast('請先填 Apps Script 網址'); return; }
+  if (syncing) { schedSync(); return; }
+  syncing = true; setSync('同步中…', 'busy');
+  try {
+    const dirty = items.filter(i => i.dirty), stamp = new Map(dirty.map(i => [i.id, i.updated]));
+    if (dirty.length) await post({ action: 'upsert', rows: dirty.map(toRow) });
+    if (delQ.length) { const ids = [...delQ]; await post({ action: 'delete', ids }); delQ = delQ.filter(id => !ids.includes(id)); }
+    const res = await fetch(cfg.url + (cfg.url.includes('?') ? '&' : '?') + 'token=' + encodeURIComponent(cfg.token) + '&t=' + Date.now());
+    const j = await res.json(); if (!j.ok) throw new Error(j.error || '讀取失敗');
+    const pending = items.filter(i => i.dirty && stamp.get(i.id) !== i.updated);
+    const m = new Map(j.rows.map(fromRow).filter(i => !delQ.includes(i.id)).map(i => [i.id, i]));
+    pending.forEach(i => m.set(i.id, i));
+    items = [...m.values()];
+    cfg.lastSync = nowStr(); saveCfg(); persist();
+    setSync('已同步', 'ok'); if (manual === true) toast('同步完成'); rerender();
+    if (pending.length) schedSync();
+  } catch (err) {
+    setSync('同步失敗', 'err'); toast('同步失敗：' + err.message); persist();
+  } finally { syncing = false; }
+}
+$('#syncBtn').onclick = () => sync(true);
+window.addEventListener('online', () => schedSync());
+
+/* ---------- 啟動 ---------- */
+$('#ver').textContent = 'v' + VER;
+applyFont();
+history.replaceState({ v: 'notes' }, '');
+show('notes');
+sync();
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+</script>
+</body>
+</html>
