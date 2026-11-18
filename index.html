@@ -9,8 +9,8 @@
 <title>英文筆記卡</title>
 <style>
 :root{--bg:#121212;--card:#1f1f1f;--card2:#2a2a2a;--tx:#f5f5f5;--sub:#dcdcdc;--line:#3a3a3a;--acc:#ffb300;--movie:#ff8a65;--life:#81c784;--work:#64b5f6;--warn:#ffd54f;--err:#ef5350}
-html{font-size:19px}
-html.f-std{font-size:17px}html.f-big{font-size:19px}html.f-xl{font-size:22px}
+html{font-size:16px}
+html.f-std{font-size:14.5px}html.f-big{font-size:16px}html.f-xl{font-size:18px}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Noto Sans TC","Microsoft JhengHei",sans-serif;line-height:1.55;padding-bottom:5.5rem}
 button,.chip,.tcard,nav button,.ex,.flip{user-select:none;-webkit-user-select:none;cursor:pointer}
@@ -56,7 +56,8 @@ th{background:var(--card2);color:var(--acc)}
 .lbl{display:block;margin:.9rem 0 .3rem;font-weight:700}
 .hint{font-size:.85rem;color:var(--sub);margin-top:.3rem}
 .pg{border:1px solid var(--line);border-radius:.9rem;margin:.8rem 0;overflow:hidden}
-.pgh{display:flex;align-items:center;gap:.6rem;padding:.6rem .8rem;background:var(--card2);font-weight:700}
+.pgh{display:flex;align-items:center;gap:.6rem;padding:.6rem .8rem;background:var(--card2);font-weight:700;flex-wrap:wrap}
+.pgh select{width:auto;padding:.35rem .5rem}.pgh input[type=text]{flex:1;min-width:8rem;padding:.35rem .6rem}
 .pe{padding:.6rem .8rem;border-top:1px solid var(--line)}
 .pe label,.pgh label{display:flex;gap:.6rem;align-items:flex-start}
 .pe input[type=checkbox],.pgh input[type=checkbox]{width:1.35rem;height:1.35rem;flex:none;margin-top:.15rem;accent-color:var(--acc)}
@@ -109,7 +110,7 @@ nav button.on{color:var(--acc);font-weight:700}
 <div id="toast"></div>
 <input type="file" id="fileIn" accept="application/json" class="hidden">
 <script>
-const VER = '1.0.0';
+const VER = '1.1.0';
 const CATS = ['電影', '生活', '工作'];
 const LS = { items: 'enc:items', del: 'enc:del', cfg: 'enc:cfg' };
 const $ = s => document.querySelector(s);
@@ -337,9 +338,9 @@ function renderPrev() {
   const groups = [];
   parsed.forEach((p, i) => { const k = p.cat + '｜' + p.topic; let g = groups.find(g => g.k === k); if (!g) groups.push(g = { k, cat: p.cat, name: p.topic, idx: [] }); g.idx.push(i); });
   const cnt = parsed.filter(p => p.on).length;
-  $('#prev').innerHTML = `<div class="hint">勾選要加入的項目（預設全選）。同主題、同句子會自動合併，不會重複。</div>` + groups.map((g, gi) => {
+  $('#prev').innerHTML = `<div class="hint">勾選要加入的項目（預設全選）。主題名稱和分類可以直接改；改成已有的主題名稱，會合併進那個主題。</div>` + groups.map((g, gi) => {
     const exists = items.some(i => i.cat === g.cat && i.topic === g.name);
-    return `<div class="pg"><div class="pgh"><label><input type="checkbox" data-g="${gi}" ${g.idx.every(i => parsed[i].on) ? 'checked' : ''}><span><span class="cat c-${g.cat}">${g.cat}</span> ${esc(g.name)}${exists ? '　<span class="tmeta">（加入既有主題）</span>' : ''}</span></label></div>` +
+    return `<div class="pg"><div class="pgh"><input type="checkbox" data-g="${gi}" ${g.idx.every(i => parsed[i].on) ? 'checked' : ''}><select data-gc="${gi}">${CATS.map(c => `<option ${c === g.cat ? 'selected' : ''}>${c}</option>`).join('')}</select><input type="text" data-gn="${gi}" value="${esc(g.name)}" placeholder="主題名稱">${exists ? '<span class="tmeta">（加入既有主題）</span>' : ''}</div>` +
       g.idx.map(i => prevEntry(parsed[i], i)).join('') + '</div>';
   }).join('') + `<div class="row"><button class="pri" id="commitBtn">加入勾選的 ${cnt} 項</button></div>`;
   $('#prev').dataset.groups = JSON.stringify(groups.map(g => g.idx));
@@ -353,7 +354,14 @@ function prevEntry(p, i) {
   return `<div class="pe"><label><input type="checkbox" data-p="${i}" ${p.on ? 'checked' : ''}><span>${body}</span></label>${exs}</div>`;
 }
 $('#prev').onchange = e => {
-  const c = e.target; if (c.type !== 'checkbox') return;
+  const c = e.target;
+  if (c.dataset.gc != null || c.dataset.gn != null) {
+    const gi = c.dataset.gc ?? c.dataset.gn, idx = JSON.parse($('#prev').dataset.groups)[gi];
+    if (c.dataset.gc != null) idx.forEach(i => parsed[i].cat = c.value);
+    else { const v = c.value.trim(); if (!v) return toast('主題名稱不能空白'); idx.forEach(i => parsed[i].topic = v); }
+    const y0 = window.scrollY; renderPrev(); window.scrollTo(0, y0); return;
+  }
+  if (c.type !== 'checkbox') return;
   if (c.dataset.g != null) { JSON.parse($('#prev').dataset.groups)[c.dataset.g].forEach(i => parsed[i].on = c.checked); }
   else if (c.dataset.e != null) parsed[c.dataset.p].ex[c.dataset.e].on = c.checked;
   else parsed[c.dataset.p].on = c.checked;
