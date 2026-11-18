@@ -8,14 +8,15 @@
 <link rel="icon" href="icon-192.png">
 <title>英文筆記卡</title>
 <style>
-:root{--bg:#121212;--card:#1f1f1f;--card2:#2a2a2a;--tx:#f5f5f5;--sub:#dcdcdc;--line:#3a3a3a;--acc:#ffb300;--movie:#ff8a65;--life:#81c784;--work:#64b5f6;--warn:#ffd54f;--err:#ef5350}
+:root{--bg:#121212;--card:#1f1f1f;--card2:#2a2a2a;--tx:#f5f5f5;--sub:#dcdcdc;--line:#3a3a3a;--acc:#ffb300;--movie:#ff8a65;--life:#81c784;--work:#64b5f6;--warn:#ffd54f;--err:#ef5350;--ok:#43a047}
 html{font-size:16px}
 html.f-std{font-size:14.5px}html.f-big{font-size:16px}html.f-xl{font-size:18px}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Noto Sans TC","Microsoft JhengHei",sans-serif;line-height:1.55;padding-bottom:5.5rem}
-button,.chip,.tcard,nav button,.ex,.flip{user-select:none;-webkit-user-select:none;cursor:pointer}
+body{margin:0 auto;max-width:760px;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Noto Sans TC","Microsoft JhengHei",sans-serif;line-height:1.55;padding-bottom:5.5rem}
+button,.chip,.trow,nav button,.ex,.flip{user-select:none;-webkit-user-select:none;cursor:pointer}
 button{font:inherit;color:var(--tx);background:var(--card2);border:1px solid var(--line);border-radius:.6rem;padding:.45rem .8rem}
 button.pri{background:var(--acc);color:#111;border-color:var(--acc);font-weight:700}
+button.okb{background:var(--ok);color:#fff;border-color:var(--ok);font-weight:700}
 button.danger{border-color:var(--err);color:#ff8a80}
 input,textarea,select{font:inherit;color:var(--tx);background:#181818;border:1px solid #555;border-radius:.6rem;padding:.6rem .7rem;width:100%}
 textarea{min-height:12rem;resize:vertical;font-size:.9rem}
@@ -27,16 +28,25 @@ header{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-c
 main{padding:.8rem 1rem}
 .hidden{display:none!important}
 .chips{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.7rem}
-.chip{padding:.35rem .9rem;border-radius:2rem;border:1px solid #555;background:var(--card);font-size:.95rem}
+.chip{padding:.3rem .85rem;border-radius:2rem;border:1px solid #555;background:var(--card);font-size:.92rem}
 .chip.on{background:var(--acc);color:#111;border-color:var(--acc);font-weight:700}
-.tcard{background:var(--card);border:1px solid var(--line);border-radius:.9rem;padding:.8rem 1rem;margin:.6rem 0}
-.tname{font-size:1.1rem;font-weight:700;margin-top:.2rem}
-.tmeta{font-size:.85rem;color:var(--sub)}
+.tl{border:1px solid var(--line);border-radius:.8rem;overflow:hidden;margin:.6rem 0}
+.trow{display:flex;align-items:center;gap:.6rem;padding:.7rem .8rem;background:var(--card);border-top:1px solid var(--line)}
+.trow:first-child{border-top:0}
+.dot{width:.6rem;height:.6rem;border-radius:50%;flex:none}
+.d-電影{background:var(--movie)}.d-生活{background:var(--life)}.d-工作{background:var(--work)}
+.tn{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
+.bar{display:flex;gap:3px;flex:none}
+.bar i{display:block;width:1.05rem;height:.45rem;border-radius:.3rem;background:#3d3d3d}
+.bar i.on{background:var(--ok)}
+.bar.big i{width:2.2rem;height:.6rem}
+.cnt{color:var(--sub);font-size:.82rem;flex:none;min-width:1.6rem;text-align:right}
+.sec{font-size:.88rem;color:var(--sub);margin:1rem 0 .2rem}
 .cat{display:inline-block;font-size:.8rem;font-weight:700;padding:.05rem .55rem;border-radius:.4rem;color:#111}
 .c-電影{background:var(--movie)}.c-生活{background:var(--life)}.c-工作{background:var(--work)}
 .item{background:var(--card);border:1px solid var(--line);border-radius:.9rem;padding:.9rem 1rem;margin:.7rem 0}
 .item.arch{opacity:.55}
-.en{font-size:1.15rem;font-weight:700;color:#fff}
+.en{font-size:1.12rem;font-weight:700;color:#fff}
 .zh{color:var(--sub);margin-top:.15rem}
 .snd{margin-top:.45rem;color:#ffe082;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.92rem;word-break:break-word}
 .tip{margin-top:.35rem}
@@ -52,25 +62,32 @@ th{background:var(--card2);color:var(--acc)}
 .ttlrow{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
 .h2{font-size:1.25rem;font-weight:800}
 .empty{color:var(--sub);text-align:center;padding:2rem 1rem}
-.row{display:flex;gap:.5rem;flex-wrap:wrap;margin:.6rem 0}
+.row{display:flex;gap:.5rem;flex-wrap:wrap;margin:.6rem 0;align-items:center}
 .lbl{display:block;margin:.9rem 0 .3rem;font-weight:700}
 .hint{font-size:.85rem;color:var(--sub);margin-top:.3rem}
+.status{background:var(--card);border:1px solid var(--line);border-radius:.9rem;padding:.8rem 1rem;margin:.7rem 0}
+.status .st{margin:.4rem 0 .6rem;color:var(--sub)}
+.st b{color:var(--acc)}
+.hero{background:linear-gradient(135deg,#2b2100,#1f1f1f);border:1px solid #5a4500;border-radius:1rem;padding:1rem;margin:.4rem 0 .8rem}
+.hero .big{font-size:1.6rem;font-weight:800;color:var(--acc)}
 .pg{border:1px solid var(--line);border-radius:.9rem;margin:.8rem 0;overflow:hidden}
 .pgh{display:flex;align-items:center;gap:.6rem;padding:.6rem .8rem;background:var(--card2);font-weight:700;flex-wrap:wrap}
 .pgh select{width:auto;padding:.35rem .5rem}.pgh input[type=text]{flex:1;min-width:8rem;padding:.35rem .6rem}
 .pe{padding:.6rem .8rem;border-top:1px solid var(--line)}
-.pe label,.pgh label{display:flex;gap:.6rem;align-items:flex-start}
+.pe label{display:flex;gap:.6rem;align-items:flex-start}
 .pe input[type=checkbox],.pgh input[type=checkbox]{width:1.35rem;height:1.35rem;flex:none;margin-top:.15rem;accent-color:var(--acc)}
 .pex{margin:.35rem 0 0 1.9rem}
+.tmeta{font-size:.85rem;color:var(--sub)}
 .flip{background:var(--card);border:2px solid var(--line);border-radius:1rem;padding:1.4rem 1.1rem;min-height:14rem;margin-top:.6rem}
-.flip .q{font-size:1.35rem;font-weight:700}
+.flip .q{font-size:1.3rem;font-weight:700}
 .flip .tag{font-size:.85rem;color:var(--sub);margin-bottom:.6rem}
 .flip .hint2{color:var(--sub);margin-top:1.2rem;font-size:.9rem}
 .ans{margin-top:1rem;padding-top:1rem;border-top:1px dashed #555}
-nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:#0d0d0d;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
-nav button{flex:1;border:0;border-radius:0;background:none;padding:.7rem 0 .8rem;font-size:.9rem;color:#cfcfcf}
-nav button span{display:block;font-size:1.3rem}
+nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:760px;display:flex;background:#0d0d0d;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;border:0;border-radius:0;background:none;padding:.6rem 0 .7rem;font-size:.85rem;color:#cfcfcf;position:relative}
+nav button span{display:block;font-size:1.25rem}
 nav button.on{color:var(--acc);font-weight:700}
+nav .badge{position:absolute;top:.3rem;left:55%;background:var(--err);color:#fff;font-size:.7rem;border-radius:1rem;padding:0 .35rem;font-weight:700}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:20;display:flex;align-items:flex-end;justify-content:center}
 .mbox{background:#1b1b1b;border:1px solid var(--line);border-radius:1rem 1rem 0 0;width:100%;max-width:40rem;max-height:90vh;overflow:auto;padding:1rem}
 #toast{position:fixed;left:50%;bottom:6rem;transform:translateX(-50%);background:#333;color:#fff;padding:.6rem 1rem;border-radius:.6rem;font-size:.95rem;opacity:0;transition:opacity .2s;pointer-events:none;z-index:30;max-width:90vw}
@@ -83,7 +100,8 @@ nav button.on{color:var(--acc);font-weight:700}
   <button id="syncBtn" class="sync">⟳ <span id="syncTxt">本機</span></button>
 </header>
 <main>
-  <section id="v-notes" class="view">
+  <section id="v-today" class="view"></section>
+  <section id="v-notes" class="view hidden">
     <div class="chips" id="catChips"></div>
     <input id="q" type="search" placeholder="🔍 搜尋英文、中文、主題…">
     <div id="tlist"></div>
@@ -94,36 +112,46 @@ nav button.on{color:var(--acc);font-weight:700}
     <div class="h2">匯入筆記</div>
     <div class="hint">把 Claude「英文筆記卡」整理好的區塊整段複製，貼在下面，按「解析」。</div>
     <div class="row"><button id="pasteBtn">📋 從剪貼簿貼上</button><button id="clearBtn">清除</button></div>
-    <textarea id="imp" placeholder="#主題 電影｜The Intern&#10;- There's been a ton of research on this.｜這件事已經有很多研究了。&#10;  🔊 thərz BI-nə TUH-nə REE-sər-chɑn THIS&#10;  💡 a ton of 吞 v"></textarea>
+    <textarea id="imp" placeholder="#主題 電影｜There's been a ton of ___&#10;- There's been a ton of research on this.｜這件事已經有很多研究了。&#10;  🔊 thərz BI-nə TUH-nə REE-sər-chɑn THIS&#10;  💡 a ton of 吞 v"></textarea>
     <div class="row"><button class="pri" id="parseBtn">解析</button></div>
     <div id="prev"></div>
   </section>
   <section id="v-set" class="view hidden"></section>
 </main>
 <nav>
+  <button data-v="today"><span>📅</span>今日<b class="badge hidden" id="badge"></b></button>
   <button data-v="notes"><span>📚</span>筆記</button>
-  <button data-v="review"><span>🃏</span>複習</button>
+  <button data-v="review"><span>🃏</span>抽考</button>
   <button data-v="import"><span>➕</span>匯入</button>
   <button data-v="set"><span>⚙️</span>設定</button>
 </nav>
+<datalist id="topicDL"></datalist>
 <div id="modal" class="modal hidden"><div class="mbox" id="mbox"></div></div>
 <div id="toast"></div>
 <input type="file" id="fileIn" accept="application/json" class="hidden">
 <script>
-const VER = '1.1.0';
+const VER = '1.2.0';
 const CATS = ['電影', '生活', '工作'];
-const LS = { items: 'enc:items', del: 'enc:del', cfg: 'enc:cfg' };
+const IV = [1, 3, 7, 14];          // 第1→2、2→3、3→4、4→5 次的間隔天數
+const DAILY = 5, CAP = 20, STAGES = 5;
+const LS = { items: 'enc:items', del: 'enc:del', cfg: 'enc:cfg', prog: 'enc:prog', pdel: 'enc:pdel', meta: 'enc:meta' };
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 function load(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
 function save(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { toast('儲存失敗：' + e.message); } }
 let items = load(LS.items, []);
 let delQ = load(LS.del, []);
-let cfg = Object.assign({ url: '', token: '', rate: 0.8, font: 'big', showArch: false, lastSync: '' }, load(LS.cfg, {}));
-function persist() { save(LS.items, items); save(LS.del, delQ); }
+let prog = load(LS.prog, {});
+let pdelQ = load(LS.pdel, []);
+let meta = load(LS.meta, { date: '', allow: DAILY, done: 0, dirty: false });
+let cfg = Object.assign({ url: '', token: '', rate: 0.8, font: 'big', showArch: false, lastSync: '', srv: 1 }, load(LS.cfg, {}));
+function persist() { save(LS.items, items); save(LS.del, delQ); save(LS.prog, prog); save(LS.pdel, pdelQ); save(LS.meta, meta); }
 function saveCfg() { save(LS.cfg, cfg); }
 const pad = n => String(n).padStart(2, '0');
 function nowStr() { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`; }
+function today() { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; }
+function addDays(s, n) { const [y, m, d] = s.split('-').map(Number); const t = new Date(y, m - 1, d + n); return `${t.getFullYear()}-${pad(t.getMonth() + 1)}-${pad(t.getDate())}`; }
+function dayDiff(a, b) { const p = s => { const [y, m, d] = s.split('-').map(Number); return Date.UTC(y, m - 1, d); }; return Math.round((p(b) - p(a)) / 864e5); }
 function newId() { return 'n' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
 const norm = s => String(s || '').toLowerCase().replace(/[’‘]/g, "'").replace(/[^a-z0-9']/g, '');
 const uniq = a => [...new Set(a.filter(Boolean))];
@@ -175,66 +203,151 @@ function parse(text) {
 }
 
 /* ---------- 主題 ---------- */
+const keyOf = (cat, topic) => cat + '｜' + topic;
 function topics(includeArch) {
   const m = new Map();
   for (const it of items) {
     if (it.arch && !(includeArch ?? cfg.showArch)) continue;
-    const k = it.cat + '｜' + it.topic;
-    if (!m.has(k)) m.set(k, { key: k, cat: it.cat, name: it.topic, list: [], last: '' });
-    const t = m.get(k); t.list.push(it); if ((it.updated || '') > t.last) t.last = it.updated || '';
+    const k = keyOf(it.cat, it.topic);
+    if (!m.has(k)) m.set(k, { key: k, cat: it.cat, name: it.topic, list: [], last: '', created: it.created || '' });
+    const t = m.get(k); t.list.push(it);
+    if ((it.updated || '') > t.last) t.last = it.updated || '';
+    if ((it.created || '') < t.created) t.created = it.created || '';
   }
   return [...m.values()].sort((a, b) => b.last.localeCompare(a.last));
 }
 function itemText(i) { return [i.en, i.zh, i.sound, (i.tips || []).join(' '), (i.ex || []).map(e => e.en + ' ' + e.zh).join(' '), (i.table || []).flat().join(' '), i.warn].join(' '); }
+function sentCount(t) { return t.list.filter(i => i.type === '句').length; }
+
+/* ---------- 排程 ---------- */
+function newProg(key, dirty) { return { key, stage: 0, due: today(), last: '', done: '', updated: nowStr(), dirty }; }
+function ensureProg(afterPull) {
+  const keys = new Set(topics(true).map(t => t.key));
+  keys.forEach(k => { if (!prog[k]) prog[k] = newProg(k, afterPull); });
+  if (afterPull) Object.keys(prog).forEach(k => { if (!keys.has(k)) { delete prog[k]; pdelQ.push(k); } });
+}
+const isGrad = p => !!(p && p.done);
+function activeTopics() { return topics().filter(t => prog[t.key] && !isGrad(prog[t.key])); }
+function dueTopics() {
+  const td = today();
+  return activeTopics().filter(t => prog[t.key].due && prog[t.key].due <= td)
+    .sort((a, b) => prog[a.key].due.localeCompare(prog[b.key].due) || a.created.localeCompare(b.created));
+}
+function rollover() {
+  const td = today();
+  if (meta.date === td) return;
+  if (!meta.date) { meta = { date: td, allow: DAILY, done: 0, dirty: false }; return; }
+  const days = Math.max(1, dayDiff(meta.date, td));
+  const dueBefore = activeTopics().filter(t => prog[t.key].due && prog[t.key].due < td).length;
+  const left = Math.min(Math.max(0, meta.allow - meta.done), dueBefore);
+  meta = { date: td, allow: Math.min(CAP, left + DAILY * days), done: 0, dirty: true };
+}
+function todayQueue() { rollover(); return dueTopics().slice(0, Math.max(0, meta.allow - meta.done)); }
+function completeReview(key) {
+  const p = prog[key]; if (!p) return;
+  const td = today(), wasDue = p.due && p.due <= td;
+  p.stage = Math.min(STAGES, p.stage + 1); p.last = td;
+  if (p.stage >= STAGES) { p.done = td; p.due = ''; } else p.due = addDays(td, IV[p.stage - 1]);
+  p.updated = nowStr(); p.dirty = true;
+  if (wasDue) { rollover(); meta.done++; meta.dirty = true; }
+}
+function restartProg(key) { const p = prog[key] || (prog[key] = newProg(key, true)); Object.assign(p, { stage: 0, due: today(), done: '', updated: nowStr(), dirty: true }); }
+function barHtml(stage, big) { return `<span class="bar ${big ? 'big' : ''}">${Array.from({ length: STAGES }, (_, i) => `<i class="${i < stage ? 'on' : ''}"></i>`).join('')}</span>`; }
+function rowHtml(t) { const p = prog[t.key]; return `<div class="trow" data-key="${esc(t.key)}"><span class="dot d-${t.cat}"></span><span class="tn">${esc(t.name)}</span>${barHtml(p ? p.stage : 0)}<span class="cnt">${sentCount(t)}句</span></div>`; }
+function updateBadge() { const n = todayQueue().length; const b = $('#badge'); b.textContent = n; b.classList.toggle('hidden', !n); }
 
 /* ---------- 畫面切換 ---------- */
-let view = 'notes';
+let view = 'today', backTo = 'today', fromToday = false;
 function show(v, push) {
   document.querySelectorAll('.view').forEach(e => e.classList.add('hidden'));
   $('#v-' + v).classList.remove('hidden');
-  document.querySelectorAll('nav button').forEach(b => b.classList.toggle('on', b.dataset.v === (v === 'topic' ? 'notes' : v)));
+  const navV = v === 'topic' ? backTo : v;
+  document.querySelectorAll('nav button').forEach(b => b.classList.toggle('on', b.dataset.v === navV));
   view = v; window.scrollTo(0, 0);
   if (push) history.pushState({ v }, '');
+  if (v === 'today') renderToday();
   if (v === 'notes') renderNotes();
   if (v === 'review') { buildPool(); renderReview(); }
   if (v === 'set') renderSet();
+  updateBadge();
 }
-window.addEventListener('popstate', () => { if (!$('#modal').classList.contains('hidden')) { closeModal(); return; } if (view !== 'notes') show('notes'); });
-document.querySelectorAll('nav button').forEach(b => b.onclick = () => show(b.dataset.v, b.dataset.v !== 'notes'));
-function rerender() { if (view === 'notes') renderNotes(); else if (view === 'topic') renderTopic(); else if (view === 'set') renderSet(); }
+window.addEventListener('popstate', () => {
+  if (!$('#modal').classList.contains('hidden')) { closeModal(); return; }
+  if (view === 'topic') show(backTo); else if (view !== 'today') show('today');
+});
+document.querySelectorAll('nav button').forEach(b => b.onclick = () => { if (view === 'topic' || view === b.dataset.v) { show(b.dataset.v); return; } show(b.dataset.v, b.dataset.v !== 'today'); });
+function rerender() { if (view === 'today') renderToday(); else if (view === 'notes') renderNotes(); else if (view === 'topic') renderTopic(); else if (view === 'set') renderSet(); updateBadge(); }
+function openTopic(key, src) { curKey = key; backTo = src; fromToday = src === 'today'; show('topic', true); renderTopic(); }
+
+/* ---------- 今日 ---------- */
+function renderToday() {
+  const q = todayQueue(), total = meta.done + q.length;
+  const act = activeTopics(), grad = topics().filter(t => isGrad(prog[t.key])).length;
+  const upcoming = act.filter(t => prog[t.key].due > today()).sort((a, b) => prog[a.key].due.localeCompare(prog[b.key].due));
+  let html = `<div class="hero"><div class="tmeta">📅 今日複習　${esc(today())}</div>
+    <div class="big">${meta.done} / ${total} 篇</div>${barHtml(total ? Math.round(meta.done / total * STAGES) : 0, true)}
+    <div class="hint">每天 ${DAILY} 篇，沒讀完會累積（最多 ${CAP} 篇）。進行中 ${act.length} 篇・已畢業 ${grad} 篇</div></div>`;
+  if (q.length) {
+    html += `<div class="row"><button class="pri" id="startBtn" style="flex:1">▶ 開始複習（${q.length} 篇）</button></div><div class="tl">${q.map(rowHtml).join('')}</div>`;
+  } else if (!items.length) {
+    html += `<div class="empty">還沒有筆記。<br>到「➕ 匯入」貼上整理好的區塊。</div>`;
+  } else {
+    html += `<div class="empty">🎉 今天的複習完成了！</div>`;
+  }
+  if (upcoming.length) {
+    const nd = prog[upcoming[0].key].due, n = upcoming.filter(t => prog[t.key].due === nd).length;
+    html += `<div class="sec">下一批：${esc(nd)}，${n} 篇</div>`;
+  }
+  $('#v-today').innerHTML = html;
+}
+$('#v-today').onclick = e => {
+  if (e.target.closest('#startBtn')) { const q = todayQueue(); if (q[0]) openTopic(q[0].key, 'today'); return; }
+  const r = e.target.closest('.trow'); if (r) openTopic(r.dataset.key, 'today');
+};
 
 /* ---------- 筆記列表 ---------- */
 let fCat = '全部';
 function renderNotes() {
-  $('#catChips').innerHTML = ['全部', ...CATS, '⭐'].map(c => `<button class="chip ${fCat === c ? 'on' : ''}" data-cat="${c}">${c}</button>`).join('');
-  let ts = topics();
-  if (fCat === '⭐') ts = ts.filter(t => t.list.some(i => i.star));
-  else if (fCat !== '全部') ts = ts.filter(t => t.cat === fCat);
+  const tsAll = topics();
+  $('#catChips').innerHTML = ['全部', ...CATS, '⭐', '📦 歷史'].map(c => `<button class="chip ${fCat === c ? 'on' : ''}" data-cat="${c}">${c}</button>`).join('');
+  let ts = tsAll;
+  if (fCat === '📦 歷史') ts = ts.filter(t => isGrad(prog[t.key]));
+  else {
+    ts = ts.filter(t => !isGrad(prog[t.key]));
+    if (fCat === '⭐') ts = ts.filter(t => t.list.some(i => i.star));
+    else if (fCat !== '全部') ts = ts.filter(t => t.cat === fCat);
+  }
   const q = $('#q').value.trim().toLowerCase();
-  if (q) ts = ts.filter(t => (t.name + ' ' + t.list.map(itemText).join(' ')).toLowerCase().includes(q));
+  if (q) ts = tsAll.filter(t => (t.name + ' ' + t.list.map(itemText).join(' ')).toLowerCase().includes(q));
   if (!items.length) { $('#tlist').innerHTML = `<div class="empty">還沒有筆記。<br>到「➕ 匯入」貼上整理好的區塊。</div>`; return; }
-  if (!ts.length) { $('#tlist').innerHTML = `<div class="empty">沒有符合的筆記</div>`; return; }
-  $('#tlist').innerHTML = ts.map(t => {
-    const n = t.list.filter(i => i.type === '句').length, c = t.list.filter(i => i.type === '對照').length, w = t.list.filter(i => i.type === '待查').length;
-    const meta = [n ? n + ' 句' : '', c ? c + ' 對照' : '', w ? '⚠️ ' + w : ''].filter(Boolean).join(' · ');
-    return `<div class="tcard" data-key="${esc(t.key)}"><span class="cat c-${t.cat}">${t.cat}</span><div class="tname">${esc(t.name)}</div><div class="tmeta">${meta}　${esc((t.last || '').slice(0, 10))}</div></div>`;
-  }).join('');
+  if (!ts.length) { $('#tlist').innerHTML = `<div class="empty">${fCat === '📦 歷史' && !q ? '還沒有畢業的主題（複習滿 5 次會自動移到這裡）' : '沒有符合的主題'}</div>`; return; }
+  $('#tlist').innerHTML = `<div class="tmeta">${ts.length} 個主題</div><div class="tl">${ts.map(rowHtml).join('')}</div>`;
 }
 $('#catChips').onclick = e => { const b = e.target.closest('.chip'); if (b) { fCat = b.dataset.cat; renderNotes(); } };
 $('#q').oninput = renderNotes;
-$('#tlist').onclick = e => { const c = e.target.closest('.tcard'); if (c) { curKey = c.dataset.key; show('topic', true); renderTopic(); } };
+$('#tlist').onclick = e => { const c = e.target.closest('.trow'); if (c) openTopic(c.dataset.key, 'notes'); };
 
 /* ---------- 主題內容 ---------- */
 let curKey = null;
 const ORDER = { '句': 0, '對照': 1, '待查': 2 };
+function statusHtml(key) {
+  const p = prog[key] || newProg(key, false), td = today();
+  if (isGrad(p)) return `<div class="status">${barHtml(STAGES, true)}<div class="st">📦 已畢業（${esc(p.done)}），存放在歷史區</div><button id="restartBtn">↺ 重新複習</button></div>`;
+  const due = p.due && p.due <= td;
+  const next = p.stage + 1 < STAGES ? `完成後 ${IV[p.stage]} 天再複習` : '完成後就畢業 🎓';
+  return `<div class="status">${barHtml(p.stage, true)}<div class="st">已複習 <b>${p.stage}</b> / ${STAGES} 次・${due ? `<b>今天該複習</b>（${next}）` : `下次複習 <b>${esc(p.due)}</b>`}</div>
+    ${due ? `<button class="okb" id="doneBtn">✅ 複習完畢</button>` : `<button id="earlyBtn">提前複習完畢</button>`}</div>`;
+}
 function renderTopic() {
   const t = topics(true).find(t => t.key === curKey);
-  if (!t) { show('notes'); return; }
+  if (!t) { show(backTo); return; }
   const list = t.list.filter(i => cfg.showArch || !i.arch).sort((a, b) => ORDER[a.type] - ORDER[b.type] || (a.created || '').localeCompare(b.created || ''));
   $('#v-topic').innerHTML = `
     <div class="row"><button id="backBtn">← 返回</button><button id="renBtn">✏️ 主題／分類</button></div>
     <div class="ttlrow"><span class="cat c-${t.cat}">${t.cat}</span><span class="h2">${esc(t.name)}</span></div>
-    ${list.map(renderItem).join('') || '<div class="empty">此主題的項目都已封存</div>'}`;
+    ${statusHtml(t.key)}
+    ${list.map(renderItem).join('') || '<div class="empty">此主題的項目都已封存</div>'}
+    ${(prog[t.key] && !isGrad(prog[t.key]) && prog[t.key].due <= today()) ? `<div class="row"><button class="okb" id="doneBtn2" style="flex:1">✅ 複習完畢</button></div>` : ''}`;
 }
 function renderItem(i) {
   const acts = `<div class="acts">${i.type === '句' ? `<button data-act="say">🔈 朗讀</button><button data-act="star">${i.star ? '★ 已標記' : '☆ 標記'}</button>` : ''}${i.type !== '待查' ? `<button data-act="edit">✏️ 編輯</button><button data-act="arch">${i.arch ? '取消封存' : '封存'}</button>` : ''}<button data-act="del" class="danger">${i.type === '待查' ? '✓ 已解決，刪除' : '🗑 刪除'}</button></div>`;
@@ -251,9 +364,23 @@ function renderItem(i) {
   }
   return `<div class="item warnbox" data-id="${i.id}">⚠️ 待查：${esc(i.warn)}${acts}</div>`;
 }
+function finishTopic(early) {
+  if (early && !confirm('還沒到複習日，確定要提前算一次嗎？')) return;
+  completeReview(curKey); persist(); schedSync();
+  const p = prog[curKey];
+  if (fromToday) {
+    const q = todayQueue();
+    if (q.length) { toast(isGrad(p) ? '🎓 畢業了！下一篇' : '✅ 完成，下一篇'); curKey = q[0].key; renderTopic(); window.scrollTo(0, 0); updateBadge(); return; }
+    toast('🎉 今天的複習全部完成！'); history.back(); return;
+  }
+  toast(isGrad(p) ? '🎓 複習滿 5 次，已移到歷史區' : `✅ 已記錄，下次 ${p.due}`); rerender();
+}
 $('#v-topic').onclick = e => {
   if (e.target.closest('#backBtn')) { history.back(); return; }
   if (e.target.closest('#renBtn')) { renameTopic(); return; }
+  if (e.target.closest('#doneBtn') || e.target.closest('#doneBtn2')) { finishTopic(false); return; }
+  if (e.target.closest('#earlyBtn')) { finishTopic(true); return; }
+  if (e.target.closest('#restartBtn')) { restartProg(curKey); persist(); schedSync(); toast('已移回複習清單，今天開始'); rerender(); return; }
   const ex = e.target.closest('.ex'); if (ex) { say(ex.dataset.say); return; }
   const b = e.target.closest('[data-act]'); if (!b) return;
   const it = items.find(x => x.id === b.closest('.item').dataset.id); if (!it) return;
@@ -285,6 +412,7 @@ function openModal(html) { $('#mbox').innerHTML = html; $('#modal').classList.re
 function closeModal() { $('#modal').classList.add('hidden'); }
 function closeModalBack() { if (!$('#modal').classList.contains('hidden')) history.back(); }
 $('#modal').onclick = e => { if (e.target.id === 'modal') closeModalBack(); };
+function fillDL() { $('#topicDL').innerHTML = uniq(topics(true).map(t => t.name)).map(n => `<option value="${esc(n)}">`).join(''); }
 
 function editItem(it) {
   const isS = it.type === '句';
@@ -305,18 +433,27 @@ function editItem(it) {
     touch(it); closeModalBack(); commitChange(); toast('已儲存');
   };
 }
+function moveProg(oldKey, newKey) {
+  if (oldKey === newKey) return;
+  const o = prog[oldKey], n = prog[newKey];
+  if (o && n) { if (o.stage < n.stage || isGrad(n)) Object.assign(n, { stage: o.stage, due: o.due, done: o.done }); n.updated = nowStr(); n.dirty = true; }
+  else if (o) prog[newKey] = { ...o, key: newKey, updated: nowStr(), dirty: true };
+  if (o) { delete prog[oldKey]; pdelQ.push(oldKey); }
+}
 function renameTopic() {
   const t = topics(true).find(t => t.key === curKey); if (!t) return;
+  fillDL();
   openModal(`<div class="h2">主題／分類</div>
     <label class="lbl">分類</label><select id="r_cat">${CATS.map(c => `<option ${c === t.cat ? 'selected' : ''}>${c}</option>`).join('')}</select>
-    <label class="lbl">主題名稱</label><input id="r_name" value="${esc(t.name)}">
-    <div class="hint">改成已存在的主題名稱，會自動合併到那個主題。</div>
+    <label class="lbl">主題名稱</label><input id="r_name" list="topicDL" value="${esc(t.name)}">
+    <div class="hint">可以從清單選既有主題（分類也要相同），就會合併進去；複習進度保留比較少的那一個。</div>
     <div class="row"><button class="pri" id="r_ok">儲存</button><button id="r_no">取消</button></div>`);
   $('#r_no').onclick = closeModalBack;
   $('#r_ok').onclick = () => {
-    const cat = $('#r_cat').value, name = $('#r_name').value.trim() || t.name;
+    const cat = $('#r_cat').value, name = $('#r_name').value.trim() || t.name, nk = keyOf(cat, name);
     items.forEach(i => { if (i.cat === t.cat && i.topic === t.name) { i.cat = cat; i.topic = name; touch(i); } });
-    curKey = cat + '｜' + name; closeModalBack(); commitChange(); toast('已更新');
+    moveProg(t.key, nk);
+    curKey = nk; closeModalBack(); commitChange(); toast('已更新');
   };
 }
 
@@ -332,15 +469,15 @@ function doParse() {
   parsed = parse($('#imp').value);
   parsed.forEach(p => { p.on = true; (p.ex || []).forEach(x => x.on = true); });
   if (!parsed.length) { $('#prev').innerHTML = ''; return toast('找不到可匯入的內容：需要 #主題 和 - 開頭的句子'); }
-  renderPrev();
+  fillDL(); renderPrev();
 }
 function renderPrev() {
   const groups = [];
-  parsed.forEach((p, i) => { const k = p.cat + '｜' + p.topic; let g = groups.find(g => g.k === k); if (!g) groups.push(g = { k, cat: p.cat, name: p.topic, idx: [] }); g.idx.push(i); });
+  parsed.forEach((p, i) => { const k = keyOf(p.cat, p.topic); let g = groups.find(g => g.k === k); if (!g) groups.push(g = { k, cat: p.cat, name: p.topic, idx: [] }); g.idx.push(i); });
   const cnt = parsed.filter(p => p.on).length;
-  $('#prev').innerHTML = `<div class="hint">勾選要加入的項目（預設全選）。主題名稱和分類可以直接改；改成已有的主題名稱，會合併進那個主題。</div>` + groups.map((g, gi) => {
+  $('#prev').innerHTML = `<div class="hint">勾選要加入的項目（預設全選）。主題可以直接改，或從清單選既有主題來合併。</div>` + groups.map((g, gi) => {
     const exists = items.some(i => i.cat === g.cat && i.topic === g.name);
-    return `<div class="pg"><div class="pgh"><input type="checkbox" data-g="${gi}" ${g.idx.every(i => parsed[i].on) ? 'checked' : ''}><select data-gc="${gi}">${CATS.map(c => `<option ${c === g.cat ? 'selected' : ''}>${c}</option>`).join('')}</select><input type="text" data-gn="${gi}" value="${esc(g.name)}" placeholder="主題名稱">${exists ? '<span class="tmeta">（加入既有主題）</span>' : ''}</div>` +
+    return `<div class="pg"><div class="pgh"><input type="checkbox" data-g="${gi}" ${g.idx.every(i => parsed[i].on) ? 'checked' : ''}><select data-gc="${gi}">${CATS.map(c => `<option ${c === g.cat ? 'selected' : ''}>${c}</option>`).join('')}</select><input type="text" list="topicDL" data-gn="${gi}" value="${esc(g.name)}" placeholder="主題名稱">${exists ? '<span class="tmeta">（加入既有主題）</span>' : ''}</div>` +
       g.idx.map(i => prevEntry(parsed[i], i)).join('') + '</div>';
   }).join('') + `<div class="row"><button class="pri" id="commitBtn">加入勾選的 ${cnt} 項</button></div>`;
   $('#prev').dataset.groups = JSON.stringify(groups.map(g => g.idx));
@@ -396,14 +533,19 @@ function commitImport() {
   const sel = parsed.filter(p => p.on); if (!sel.length) return toast('沒有勾選任何項目');
   const r = { new: 0, upd: 0, dup: 0 };
   sel.forEach(p => r[mergeEntry(p)]++);
+  uniq(sel.map(p => keyOf(p.cat, p.topic))).forEach(k => {
+    const p = prog[k];
+    if (!p) prog[k] = newProg(k, true);
+    else if (isGrad(p)) restartProg(k);
+  });
   persist(); schedSync();
-  toast(`新增 ${r.new} 項、更新 ${r.upd} 項` + (r.dup ? `、略過重複 ${r.dup} 項` : ''));
-  curKey = sel[0].cat + '｜' + sel[0].topic;
+  toast(`新增 ${r.new} 項、更新 ${r.upd} 項` + (r.dup ? `、略過重複 ${r.dup} 項` : '') + '，已排入複習');
+  const k0 = keyOf(sel[0].cat, sel[0].topic);
   $('#imp').value = ''; parsed = []; $('#prev').innerHTML = '';
-  show('topic', true); renderTopic();
+  openTopic(k0, 'notes');
 }
 
-/* ---------- 複習 ---------- */
+/* ---------- 抽考 ---------- */
 const rv = { pool: [], i: 0, open: false, cat: '全部', star: false, dir: 'zh' };
 function buildPool() {
   let p = items.filter(i => i.type === '句' && !i.arch);
@@ -414,13 +556,12 @@ function buildPool() {
 }
 function renderReview() {
   const it = rv.pool[rv.i];
-  const ctl = `<div class="chips">${['全部', ...CATS].map(c => `<button class="chip ${rv.cat === c ? 'on' : ''}" data-rc="${c}">${c}</button>`).join('')}<button class="chip ${rv.star ? 'on' : ''}" data-rs="1">⭐ 只看標記</button></div>
+  const ctl = `<div class="hint" style="margin-bottom:.6rem">隨機抽句子自我測驗，不影響複習排程。</div><div class="chips">${['全部', ...CATS].map(c => `<button class="chip ${rv.cat === c ? 'on' : ''}" data-rc="${c}">${c}</button>`).join('')}<button class="chip ${rv.star ? 'on' : ''}" data-rs="1">⭐ 只看標記</button></div>
     <div class="chips"><button class="chip ${rv.dir === 'zh' ? 'on' : ''}" data-rd="zh">看中文 → 說英文</button><button class="chip ${rv.dir === 'en' ? 'on' : ''}" data-rd="en">看英文 → 想中文</button></div>`;
-  if (!it) { $('#v-review').innerHTML = ctl + `<div class="empty">這個範圍沒有句子可以複習</div>`; return; }
-  const noZh = !it.zh;
-  const front = rv.dir === 'zh' && !noZh ? `<div class="q">${esc(it.zh)}</div>` : `<div class="q">${esc(it.en)}</div>`;
-  const back = rv.dir === 'zh' && !noZh
-    ? `<div class="en">${esc(it.en)}</div>${it.sound ? `<div class="snd">🔊 ${esc(it.sound)}</div>` : ''}`
+  if (!it) { $('#v-review').innerHTML = ctl + `<div class="empty">這個範圍沒有句子</div>`; return; }
+  const useZh = rv.dir === 'zh' && it.zh;
+  const front = `<div class="q">${esc(useZh ? it.zh : it.en)}</div>`;
+  const back = useZh ? `<div class="en">${esc(it.en)}</div>${it.sound ? `<div class="snd">🔊 ${esc(it.sound)}</div>` : ''}`
     : `${it.zh ? `<div class="en">${esc(it.zh)}</div>` : ''}${it.sound ? `<div class="snd">🔊 ${esc(it.sound)}</div>` : ''}`;
   $('#v-review').innerHTML = ctl + `<div class="flip" id="flip">
       <div class="tag"><span class="cat c-${it.cat}">${it.cat}</span> ${esc(it.topic)}　${rv.i + 1} / ${rv.pool.length}</div>
@@ -450,9 +591,11 @@ function renderSet() {
     <label class="lbl">密碼（與 Code.gs 的 TOKEN 相同）</label><input id="s_tok" value="${esc(cfg.token)}">
     <div class="row"><button class="pri" id="s_sync">⟳ 立即同步</button></div>
     <div class="hint">上次同步：${esc(cfg.lastSync || '尚未同步')}　｜　句子 ${n} 句、主題 ${topics(true).length} 個</div>
+    ${cfg.url && cfg.lastSync && cfg.srv < 2 ? `<div class="hint" style="color:var(--warn)">⚠️ 試算表的 Code.gs 是舊版，複習進度目前只存在這台裝置。請更新 Code.gs 並部署「新版本」。</div>` : ''}
     <label class="lbl">朗讀速度</label><div class="chips">${[0.6, 0.8, 1.0].map(r => `<button class="chip ${+cfg.rate === r ? 'on' : ''}" data-rate="${r}">${r}x</button>`).join('')}</div>
     <label class="lbl">字級</label><div class="chips">${[['std', '標準'], ['big', '大'], ['xl', '特大']].map(([k, l]) => `<button class="chip ${cfg.font === k ? 'on' : ''}" data-font="${k}">${l}</button>`).join('')}</div>
     <label class="lbl">封存的項目</label><div class="chips"><button class="chip ${cfg.showArch ? 'on' : ''}" id="s_arch">${cfg.showArch ? '顯示中' : '已隱藏'}</button></div>
+    <label class="lbl">複習規則</label><div class="hint">每天 ${DAILY} 篇，沒讀完累積到隔天（最多 ${CAP} 篇）；新匯入的算在內。每篇複習 ${STAGES} 次畢業，間隔 ${IV.join('／')} 天。</div>
     <label class="lbl">備份</label><div class="row"><button id="s_exp">⬇️ 匯出備份 JSON</button><button id="s_imp">⬆️ 從備份還原</button></div>
     <div class="hint">英文筆記卡 v${VER}</div>`;
 }
@@ -463,8 +606,8 @@ $('#v-set').onclick = e => {
   if (t.id === 's_arch') { cfg.showArch = !cfg.showArch; saveCfg(); renderSet(); return; }
   if (t.id === 's_sync') { sync(true); return; }
   if (t.id === 's_exp') {
-    const blob = new Blob([JSON.stringify({ app: 'enc', ver: VER, at: nowStr(), items }, null, 1)], { type: 'application/json' });
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `英文筆記卡備份_${nowStr().slice(0, 10)}.json`; a.click(); return;
+    const blob = new Blob([JSON.stringify({ app: 'enc', ver: VER, at: nowStr(), items, prog }, null, 1)], { type: 'application/json' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `英文筆記卡備份_${today()}.json`; a.click(); return;
   }
   if (t.id === 's_imp') { $('#fileIn').click(); return; }
 };
@@ -478,7 +621,9 @@ $('#fileIn').onchange = async e => {
     const j = JSON.parse(await f.text()); if (!Array.isArray(j.items)) throw new Error('格式不符');
     if (!confirm(`備份內有 ${j.items.length} 項，要合併到目前資料嗎？（相同 id 以備份為準）`)) return;
     const m = new Map(items.map(i => [i.id, i])); j.items.forEach(i => { i.dirty = true; m.set(i.id, i); });
-    items = [...m.values()]; commitChange(); toast('已還原');
+    items = [...m.values()];
+    if (j.prog) Object.values(j.prog).forEach(p => { p.dirty = true; prog[p.key] = p; });
+    ensureProg(false); commitChange(); toast('已還原');
   } catch (err) { toast('還原失敗：' + err.message); } finally { e.target.value = ''; }
 };
 function applyFont() { document.documentElement.className = 'f-' + cfg.font; }
@@ -500,6 +645,9 @@ function fromRow(r) {
     table: linesOf(r['對照表']).map(l => l.split('｜').map(c => c.trim())), warn: r['待查'] || '', star: r['星號'] === 'Y', arch: r['封存'] === 'Y',
     created: r['建立日期'] || '', updated: r['更新時間'] || '', dirty: false };
 }
+function progToRow(p) { const [c, ...t] = p.key.split('｜'); return { key: p.key, '分類': c, '主題': t.join('｜'), '階段': String(p.stage), '下次複習': p.due || '', '上次複習': p.last || '', '畢業日期': p.done || '', '更新時間': p.updated || '' }; }
+function progFromRow(r) { return { key: r.key, stage: Math.min(STAGES, Math.max(0, parseInt(r['階段'], 10) || 0)), due: r['下次複習'] || '', last: r['上次複習'] || '', done: r['畢業日期'] || '', updated: r['更新時間'] || '', dirty: false }; }
+function metaToRow() { return { key: '__meta', '分類': '', '主題': JSON.stringify({ date: meta.date, allow: meta.allow, done: meta.done }), '更新時間': nowStr() }; }
 async function post(b) {
   const r = await fetch(cfg.url, { method: 'POST', body: JSON.stringify({ ...b, token: cfg.token }) });
   const j = await r.json(); if (!j.ok) throw new Error(j.error || '寫入失敗');
@@ -512,27 +660,53 @@ async function sync(manual) {
     const dirty = items.filter(i => i.dirty), stamp = new Map(dirty.map(i => [i.id, i.updated]));
     if (dirty.length) await post({ action: 'upsert', rows: dirty.map(toRow) });
     if (delQ.length) { const ids = [...delQ]; await post({ action: 'delete', ids }); delQ = delQ.filter(id => !ids.includes(id)); }
+    const pd = Object.values(prog).filter(p => p.dirty), pstamp = new Map(pd.map(p => [p.key, p.updated]));
+    const metaWasDirty = meta.dirty, metaSnap = JSON.stringify([meta.date, meta.allow, meta.done]);
+    if (cfg.srv >= 2) {
+      const rows = pd.map(progToRow); if (metaWasDirty) rows.push(metaToRow());
+      if (rows.length) await post({ table: 'prog', action: 'upsert', rows });
+      if (metaWasDirty && JSON.stringify([meta.date, meta.allow, meta.done]) === metaSnap) meta.dirty = false;
+      if (pdelQ.length) { const ks = [...pdelQ]; await post({ table: 'prog', action: 'delete', ids: ks }); pdelQ = pdelQ.filter(k => !ks.includes(k)); }
+    }
     const res = await fetch(cfg.url + (cfg.url.includes('?') ? '&' : '?') + 'token=' + encodeURIComponent(cfg.token) + '&t=' + Date.now());
     const j = await res.json(); if (!j.ok) throw new Error(j.error || '讀取失敗');
-    const pending = items.filter(i => i.dirty && stamp.get(i.id) !== i.updated);
+    const pendingItems = items.filter(i => i.dirty && stamp.get(i.id) !== i.updated);
     const m = new Map(j.rows.map(fromRow).filter(i => !delQ.includes(i.id)).map(i => [i.id, i]));
-    pending.forEach(i => m.set(i.id, i));
+    pendingItems.forEach(i => m.set(i.id, i));
     items = [...m.values()];
+    const wasSrv = cfg.srv; cfg.srv = j.ver || 1;
+    if (cfg.srv >= 2 && Array.isArray(j.prog)) {
+      const pushed = wasSrv >= 2;
+      const keepLocal = Object.values(prog).filter(p => p.dirty && (!pushed || pstamp.get(p.key) !== p.updated));
+      const np = {};
+      j.prog.forEach(r => {
+        if (r.key === '__meta') { if (!meta.dirty) { try { const mm = JSON.parse(r['主題']); if (mm && mm.date) meta = { date: mm.date, allow: +mm.allow || DAILY, done: +mm.done || 0, dirty: false }; } catch (e) {} } return; }
+        if (!pdelQ.includes(r.key)) np[r.key] = progFromRow(r);
+      });
+      keepLocal.forEach(p => { np[p.key] = p; });
+      if (!pushed) Object.values(prog).forEach(p => { if (!np[p.key]) np[p.key] = { ...p, dirty: true }; });
+      prog = np;
+      ensureProg(true);
+      rollover();
+    } else ensureProg(false);
     cfg.lastSync = nowStr(); saveCfg(); persist();
     setSync('已同步', 'ok'); if (manual === true) toast('同步完成'); rerender();
-    if (pending.length) schedSync();
+    if (pendingItems.length || Object.values(prog).some(p => p.dirty) || pdelQ.length || (cfg.srv >= 2 && meta.dirty)) schedSync();
   } catch (err) {
     setSync('同步失敗', 'err'); toast('同步失敗：' + err.message); persist();
   } finally { syncing = false; }
 }
 $('#syncBtn').onclick = () => sync(true);
 window.addEventListener('online', () => schedSync());
+document.addEventListener('visibilitychange', () => { if (!document.hidden) { rollover(); persist(); rerender(); sync(); } });
 
 /* ---------- 啟動 ---------- */
 $('#ver').textContent = 'v' + VER;
 applyFont();
-history.replaceState({ v: 'notes' }, '');
-show('notes');
+ensureProg(false);
+rollover(); persist();
+history.replaceState({ v: 'today' }, '');
+show('today');
 sync();
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 </script>
